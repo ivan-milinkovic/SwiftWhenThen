@@ -37,14 +37,14 @@ class ViewController: UIViewController {
         }
     }
     
-    func asyncTask(msg: String, completion: dispatch_block_t) {
-        dispatch_async(dispatch_get_main_queue()) {
+    func asyncTask(_ msg: String, completion: @escaping ()->()) {
+        DispatchQueue.main.async {
             print("async task: \(msg)")
             completion()
         }
     }
     
-    @IBAction func btnAction(sender: AnyObject) {
+    @IBAction func btnAction(_ sender: AnyObject) {
         test()
     }
     

@@ -22,8 +22,8 @@ class SwiftWhenThenHostTests: XCTestCase {
     }
     
     
-    func asyncTask(msg: String, completion: dispatch_block_t) {
-        dispatch_async(dispatch_get_main_queue()) {
+    func asyncTask(_ msg: String, completion: @escaping ()->()) {
+        DispatchQueue.main.async {
             print("async task: \(msg)")
             completion()
         }
@@ -32,7 +32,7 @@ class SwiftWhenThenHostTests: XCTestCase {
     
     func testAsyncCompletion() {
         
-        let swtExpectation = self.expectationWithDescription("SWT Excpectation")
+        let swtExpectation = self.expectation(description: "SWT Excpectation")
         
         SWT.when(
             { swtCompletion in
@@ -55,18 +55,17 @@ class SwiftWhenThenHostTests: XCTestCase {
                 print("complete")
         }
         
-        waitForExpectationsWithTimeout(3) { (error: NSError?) -> Void in
+        waitForExpectations(timeout: 3) { (error: Error?) -> Void in
             if let error = error {
-                XCTFail(error.description)
+                XCTFail(error.localizedDescription)
             }
         }
-        
     }
     
     
     func testAllSyncCompletion() {
         
-        let swtExpectation = self.expectationWithDescription("SWT Excpectation")
+        let swtExpectation = self.expectation(description: "SWT Excpectation")
         
         SWT.when(
             { swtCompletion in
@@ -86,9 +85,9 @@ class SwiftWhenThenHostTests: XCTestCase {
                 print("complete")
         }
         
-        waitForExpectationsWithTimeout(3) { (error: NSError?) -> Void in
+        waitForExpectations(timeout: 3) { (error: Error?) -> Void in
             if let error = error {
-                XCTFail(error.description)
+                XCTFail(error.localizedDescription)
             }
         }
     }
@@ -96,7 +95,7 @@ class SwiftWhenThenHostTests: XCTestCase {
     
     func testSyncAsyncCompletion() {
         
-        let swtExpectation = self.expectationWithDescription("SWT Excpectation")
+        let swtExpectation = self.expectation(description: "SWT Excpectation")
         
         SWT.when(
             { swtCompletion in
@@ -117,9 +116,9 @@ class SwiftWhenThenHostTests: XCTestCase {
                 print("complete")
         }
         
-        waitForExpectationsWithTimeout(3) { (error: NSError?) -> Void in
+        waitForExpectations(timeout: 3) { (error: Error?) -> Void in
             if let error = error {
-                XCTFail(error.description)
+                XCTFail(error.localizedDescription)
             }
         }
     }
@@ -128,7 +127,7 @@ class SwiftWhenThenHostTests: XCTestCase {
     
     func testAsyncSyncAsyncCompletion() {
         
-        let swtExpectation = self.expectationWithDescription("SWT Excpectation")
+        let swtExpectation = self.expectation(description: "SWT Excpectation")
         
         SWT.when(
             { swtCompletion in
@@ -150,9 +149,9 @@ class SwiftWhenThenHostTests: XCTestCase {
                 print("complete")
         }
         
-        waitForExpectationsWithTimeout(3) { (error: NSError?) -> Void in
+        waitForExpectations(timeout: 3) { (error: Error?) -> Void in
             if let error = error {
-                XCTFail(error.description)
+                XCTFail(error.localizedDescription)
             }
         }
     }
@@ -160,7 +159,7 @@ class SwiftWhenThenHostTests: XCTestCase {
     
     func testAsyncSyncCompletion() {
         
-        let swtExpectation = self.expectationWithDescription("SWT Excpectation")
+        let swtExpectation = self.expectation(description: "SWT Excpectation")
         
         SWT.when(
             { swtCompletion in
@@ -182,9 +181,9 @@ class SwiftWhenThenHostTests: XCTestCase {
                 print("complete")
         }
         
-        waitForExpectationsWithTimeout(3) { (error: NSError?) -> Void in
+        waitForExpectations(timeout: 3) { (error: Error?) -> Void in
             if let error = error {
-                XCTFail(error.description)
+                XCTFail(error.localizedDescription)
             }
         }
     }

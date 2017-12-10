@@ -10,20 +10,20 @@ import Foundation
 
 
 class SWTCompletion {
-    private let currentWt : SWT
-    private init(currentWt : SWT) {
+    fileprivate let currentWt : SWT
+    fileprivate init(currentWt : SWT) {
         // keep the current instance in memory
         self.currentWt = currentWt
     }
     
     // note: can't use dispatch_once as it requires a token to be a global or a static varible
     // which does not fit this use case, because locking should be done on per instance level
-    private var lock = NSLock()
-    private var isDone: Bool = false
+    fileprivate var lock = NSLock()
+    fileprivate var isDone: Bool = false
     
     func done () {
         
-        let lockStatus = lock.tryLock()
+        let lockStatus = lock.try()
         if lockStatus {
             
             if !isDone {    // prevent multiple done calls doing harm
@@ -45,56 +45,54 @@ class SWTCompletion {
 
 class SWT {
     
-    typealias SWTClosure = (swtCompletion: SWTCompletion) -> Void
-    typealias SWTCompletionClosure = dispatch_block_t //(errors: [NSError]?) -> Void
+    typealias SWTClosure = (_ swtCompletion: SWTCompletion) -> Void
+    typealias SWTCompletionClosure = ()->()
     
-    private var dispatchGroup : dispatch_group_t? = nil
-    private var finalClosure : SWTCompletionClosure? = nil
+    fileprivate var dispatchGroup : DispatchGroup
+    fileprivate var finalClosure : SWTCompletionClosure? = nil
     
-    private var closures : [SWTClosure]? = nil
-    private var errors : [NSError]? = nil
+    fileprivate var closures : [SWTClosure]? = nil
     
+    fileprivate init () {
+        dispatchGroup = DispatchGroup()
+    }
     
-    private init () {
+    fileprivate func onClosureStart() {
+        self.dispatchGroup.enter()
+    }
+    
+    fileprivate func onClosureDone() {
+        self.dispatchGroup.leave()
+    }
+    
+    fileprivate func start() {
         
-    }
-    
-    private func onClosureStart() {
-        dispatch_group_enter(self.dispatchGroup!)
-    }
-    
-    private func onClosureDone() {
-        dispatch_group_leave(self.dispatchGroup!)
-    }
-    
-    private func start() {
-        
-        dispatchGroup = dispatch_group_create()
+        dispatchGroup = DispatchGroup()
         
         if let closures = closures {
             for closure in closures {
                 let swtCompletion = SWTCompletion(currentWt: self)
                 onClosureStart()
-                closure(swtCompletion: swtCompletion)
+                closure(swtCompletion)
             }
         }
         
         // callback to execute the final "then" closure
-        dispatch_group_notify(dispatchGroup!, dispatch_get_main_queue()) {
+        dispatchGroup.notify(queue: DispatchQueue.main) {
             if let finalClosure = self.finalClosure {   // intentionally capture self
                 finalClosure()
             }
         }
     }
     
-    class func when(closures: SWTClosure...) -> SWT {
+    class func when(_ closures: SWTClosure...) -> SWT {
         
         let instance = SWT()
         instance.closures = closures
         return instance
     }
     
-    func then(closure: SWTCompletionClosure) {
+    func then(_ closure: @escaping SWTCompletionClosure) {
         finalClosure = closure
         
         // all setup, go!
