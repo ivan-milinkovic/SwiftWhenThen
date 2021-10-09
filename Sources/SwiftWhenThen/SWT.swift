@@ -1,15 +1,6 @@
-//
-//  WT.swift
-//  AfterPerformDemo
-//
-//  Created by Ivan Milinkovic on 11/26/15.
-//
-//
-
 import Foundation
 
-
-class SWTCompletion {
+public class SWTCompletion {
     fileprivate let currentWt : SWT
     fileprivate init(currentWt : SWT) {
         // keep the current instance in memory
@@ -21,7 +12,7 @@ class SWTCompletion {
     fileprivate var lock = NSLock()
     fileprivate var isDone: Bool = false
     
-    func done () {
+    public func done () {
         
         let lockStatus = lock.try()
         if lockStatus {
@@ -43,10 +34,10 @@ class SWTCompletion {
 
 
 
-class SWT {
+public class SWT {
     
-    typealias SWTClosure = (_ swtCompletion: SWTCompletion) -> Void
-    typealias SWTCompletionClosure = ()->()
+    public typealias SWTClosure = (_ swtCompletion: SWTCompletion) -> Void
+    public typealias SWTCompletionClosure = ()->()
     
     fileprivate var dispatchGroup : DispatchGroup
     fileprivate var finalClosure : SWTCompletionClosure? = nil
@@ -85,14 +76,14 @@ class SWT {
         }
     }
     
-    class func when(_ closures: SWTClosure...) -> SWT {
+    public class func when(_ closures: SWTClosure...) -> SWT {
         
         let instance = SWT()
         instance.closures = closures
         return instance
     }
     
-    func then(_ closure: @escaping SWTCompletionClosure) {
+    public func then(_ closure: @escaping SWTCompletionClosure) {
         finalClosure = closure
         
         // all setup, go!

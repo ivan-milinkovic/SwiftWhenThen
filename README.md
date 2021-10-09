@@ -1,6 +1,6 @@
 # SwiftWhenThen
 
-SwiftWhenThen is a simple library which helps join multiple asynchronous requests. It is a simple jQuery-like when-then logic, using GCD dispatch groups.
+SwiftWhenThen (a practice project) is a simple library which helps join multiple asynchronous requests. It is a simple jQuery-like when-then logic, using GCD dispatch groups.
 An example:
 
 ```swift
@@ -29,13 +29,3 @@ An example:
     }
 
 ```
-
-## Installation
-
-Just copy the SWT.swift file into your project.
-
-:) 
-
----
-
-

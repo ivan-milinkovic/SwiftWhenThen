@@ -1,13 +1,5 @@
-//
-//  SwiftWhenThenHostTests.swift
-//  SwiftWhenThenHostTests
-//
-//  Created by Ivan Milinkovic on 11/30/15.
-//
-//
-
 import XCTest
-@testable import SwiftWhenThenHost
+import SwiftWhenThen
 
 class SwiftWhenThenHostTests: XCTestCase {
     
